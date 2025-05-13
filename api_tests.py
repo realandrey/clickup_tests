@@ -1,3 +1,5 @@
+from http.client import responses
+
 import requests
 
 from conftest import create_and_delete_task
@@ -43,3 +45,17 @@ def test_update_task(create_and_delete_task):
     assert response.status_code == 200, f"Ожидал 200 статус код, получил {response.status_code}"
     assert "id" in response.json()
     assert response.json()["name"] == "Updated task from Postman"
+
+
+def test_delete_task(create_and_delete_task):
+    task_id = create_and_delete_task
+    url = f"{BASE_URL}/task/{task_id}"
+
+    response = requests.delete(url, headers=HEADERS)
+
+    assert response.status_code == 204, f"Ожидал 204 статус код, получил {response.status_code}"
+    assert response.content == b'', "Ожидал пустое тело ответа"
+
+    response_get = requests.get(f"{BASE_URL}/task/{task_id}", headers=HEADERS)
+    assert response_get.status_code == 404, f"Ожидал 404 статус код, задача не была удалена, получил {response_get.status_code}"
+
