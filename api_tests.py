@@ -1,4 +1,6 @@
 import requests
+
+from conftest import create_and_delete_task
 from constants import BASE_URL, HEADERS, LIST_ID
 
 def test_create_task():
@@ -15,3 +17,14 @@ def test_create_task():
 
     task_id = response.json()["id"]
     requests.delete(f"{BASE_URL}/task/{task_id}", headers=HEADERS)
+
+def test_get_task(create_and_delete_task):
+    task_id = create_and_delete_task
+    url = f"{BASE_URL}/task/{task_id}"
+
+    response = requests.get(url, headers=HEADERS)
+
+    assert response.status_code == 200, f"Ожидал 200 статус код, получил {response.status_code}"
+    data = response.json()
+    assert data["id"] == str(task_id), "ID задачи не совпадает"
+    assert "name" in data, "Поле 'name' отсутствует в ответе"
