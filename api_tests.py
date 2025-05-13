@@ -56,6 +56,6 @@ def test_delete_task(create_and_delete_task):
     assert response.status_code == 204, f"Ожидал 204 статус код, получил {response.status_code}"
     assert response.content == b'', "Ожидал пустое тело ответа"
 
-    response_get = requests.get(f"{BASE_URL}/task/{task_id}", headers=HEADERS)
+    response_get = requests.get(f"{BASE_URL}/task/{task_id}", headers=HEADERS) #Запрос на получение информации о задаче с тем же task_id, чтобы убедиться, что задача больше не существует.
     assert response_get.status_code == 404, f"Ожидал 404 статус код, задача не была удалена, получил {response_get.status_code}"
 
