@@ -1,11 +1,13 @@
-BASE_URL = "https://api.pomidor-stage.ru"
+from utils.helpers import CLICKUP_API_KEY
 
-AUTH_HEADERS = {
-    "Content-Type": "application/json",
-    "Accept": "application/json"
+BASE_URL = "https://api.clickup.com/api/v2"
+
+HEADERS = {
+    "Authorization": CLICKUP_API_KEY,
+    "Content-Type": "application/json"
 }
 
-API_HEADERS = {
-    "Content-Type": "application/json",
-    "Accept": "application/json"
-}
+# ID твоего Workspace, Space и List надо найти вручную в ClickUp
+WORKSPACE_ID = "..."
+SPACE_ID = "..."
+LIST_ID = "..."
