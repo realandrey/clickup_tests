@@ -1,9 +1,7 @@
-from http.client import responses
-
 import requests
 import pytest
 
-from conftest import create_and_delete_task
+from tests.conftest import create_and_delete_task
 from constants import BASE_URL, HEADERS, LIST_ID
 
 def test_create_task():
