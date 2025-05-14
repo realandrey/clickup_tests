@@ -2,6 +2,7 @@ import requests
 import pytest
 from constants import BASE_URL, HEADERS, LIST_ID
 
+
 @pytest.fixture(scope="session")
 def create_and_delete_task():
     create_url = f"{BASE_URL}/list/{LIST_ID}/task"
