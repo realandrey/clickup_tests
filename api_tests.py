@@ -70,7 +70,7 @@ def test_create_task_negative(payload, expected_status):
     url = f"{BASE_URL}/list/{LIST_ID}/task"
     response = requests.post(url, headers=HEADERS, json=payload)
 
-    assert response.status_code == expected_status, f"Ожидал {expected_status}, получил {response.status_code}"
+    assert response.status_code == expected_status, f"Ожидал {expected_status}, получил {response.status_code}. Ответ: {response.text}"
 
 
 def test_get_task_negative():
