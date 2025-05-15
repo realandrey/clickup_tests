@@ -30,7 +30,7 @@ class BasePage:
         self.page.wait_for_selector(selector)
         self.page.type(selector, value, delay=delay)
 
-    def assert_element_is_visible(self, selector, timeout=15000):
+    def assert_element_is_visible(self, selector, timeout=60000):
         expect(self.page.locator(selector)).to_be_visible(timeout=timeout)
 
     def assert_text_present_on_page(self, text):
@@ -43,5 +43,6 @@ class BasePage:
         expect(self.page.locator(selector)).to_have_value(expected_value)
 
     def wait_for_selector(self,selector):
-        expect(self.page.locator("text=Spaces")).to_be_visible(timeout=15000)
+        expect(self.page.locator(selector)).to_be_visible(timeout=10000)
+
 

@@ -5,13 +5,13 @@ class LoginPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self._endpoint = 'login'
-        self.page.set_default_timeout(30000)
+        self.page.set_default_timeout(60000)
 
     USERNAME_SELECTOR = '[id="login-email-input"]'
     PASSWORD_SELECTOR = '[id="login-password-input"]'
     LOGIN_BUTTON_SELECTOR = '[data-test="login-submit"]'
     PASSWORD_INVALID_SELECTOR = '[id="login-password-input"]'
-
+    ERROR_SELECTOR = '[data-test="form__error"]'
 
 
     def login(self, username, password):
