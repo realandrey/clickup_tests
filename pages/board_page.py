@@ -20,3 +20,4 @@ class BoardPage(BasePage):
         expect(self.page).to_have_url(f"https://app.clickup.com/{self._endpoint}")
 
     def delete_card(self):
+# навести курсор на карточку через ховер(добавить в бейз пейдж) затем нажаить на кебаб и удалить.
