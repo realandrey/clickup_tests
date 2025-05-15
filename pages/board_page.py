@@ -16,3 +16,7 @@ class BoardPage(BasePage):
 
     def open_board(self):
         self.page.goto(f"https://app.clickup.com/{self._endpoint}")
+        self.page.wait_for_load_state("load")
+        expect(self.page).to_have_url(f"https://app.clickup.com/{self._endpoint}")
+
+    def delete_card(self):
