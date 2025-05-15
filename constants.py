@@ -8,6 +8,6 @@ HEADERS = {
 }
 
 # ID твоего Workspace, Space и List надо найти вручную в ClickUp
-WORKSPACE_ID = "90151159924"
+TEAM_ID = "90151159924"
 SPACE_ID = "90154583437"
 LIST_ID = "901511028330"
