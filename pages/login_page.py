@@ -4,24 +4,30 @@ from pages.base_page import BasePage
 class LoginPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
-        self._endpoint = '/login'
-        self.page.set_default_timeout(15000)
+        self._endpoint = 'login'
+        self.page.set_default_timeout(30000)
 
     USERNAME_SELECTOR = '[id="login-email-input"]'
     PASSWORD_SELECTOR = '[id="login-password-input"]'
-    LOGIN_BUTTON_SELECTOR = '.login-page-new__main-form-button'
-    ERROR_SELECTOR = '.cu-form__error-text'
+    LOGIN_BUTTON_SELECTOR = '[data-test="login-submit"]'
+    PASSWORD_INVALID_SELECTOR = '[id="login-password-input"]'
+
+
 
     def login(self, username, password):
         self.navigate_to()
-        self.wait_for_selector_and_fill(self.USERNAME_SELECTOR, username)
-        self.wait_for_selector_and_fill(self.PASSWORD_SELECTOR, password)
+        self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
+        self.wait_for_selector_and_type(self.PASSWORD_SELECTOR, password, 100)
+        self.assert_input_value(self.USERNAME_SELECTOR, username)
+        self.assert_input_value(self.PASSWORD_SELECTOR, password)
         self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
 
 
     def login_with_invalid_password(self, username, password):
         self.navigate_to()
-        self.wait_for_selector_and_fill(self.USERNAME_SELECTOR, username)
-        self.wait_for_selector_and_fill(self.PASSWORD_SELECTOR, password)
+        self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
+        self.wait_for_selector_and_type(self.PASSWORD_INVALID_SELECTOR, password, 100)
+        self.assert_input_value(self.USERNAME_SELECTOR, username)
+        self.assert_input_value(self.PASSWORD_INVALID_SELECTOR, password)
         self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
         self.wait_for_selector(self.ERROR_SELECTOR)

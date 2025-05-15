@@ -2,6 +2,7 @@ import pytest
 
 from playwright.sync_api import sync_playwright
 from pages.login_page import LoginPage
+from utils.helpers import CLICKUP_EMAIL, CLICKUP_PASSWORD
 
 
 @pytest.fixture(scope="session")
@@ -13,14 +14,10 @@ def browser():
     playwright.stop()
 
 @pytest.fixture
-def page(browser):
+def login(browser):
     context = browser.new_context()
     page = context.new_page()
+    LoginPage(page).login(CLICKUP_EMAIL, CLICKUP_PASSWORD)
     yield page
     context.close()
 
-@pytest.fixture
-def login_fixture(page):
-    login_page = LoginPage(page)
-    login_page.login('dolomonddd@gmail.com', 'Test@756990!!')  # Логинимся с правильными данными
-    return login_page

@@ -1,20 +1,22 @@
-from playwright.sync_api import sync_playwright, expect
+import re
+from playwright.sync_api import expect
 
 class BasePage:
-    __Base_URL = 'https://app.clickup.com'
 
-    def __init__(self, page):
+    def __init__(self, page, base_url='https://app.clickup.com'):
         self.page = page
-        self._endpoint = ""
+        self._endpoint = ''
+        self.base_url = base_url
 
     def _get_full_url(self):
-        return f'{self.__Base_URL.rstrip("/")}/{self._endpoint.lstrip("/")}'
+        return f"{self.base_url}/{self._endpoint}"
 
     def navigate_to(self):
         full_url = self._get_full_url()
         self.page.goto(full_url)
         self.page.wait_for_load_state('load')
         expect (self.page).to_have_url(full_url)
+        expect(self.page).to_have_url(re.compile(f"{full_url}"))
 
     def wait_for_selector_and_click(self, selector):
         self.page.wait_for_selector(selector)
@@ -28,8 +30,8 @@ class BasePage:
         self.page.wait_for_selector(selector)
         self.page.type(selector, value, delay=delay)
 
-    def assert_element_is_visiable(self, selector):
-        expect(self.page.locator(selector)).to_be_visible()
+    def assert_element_is_visible(self, selector, timeout=15000):
+        expect(self.page.locator(selector)).to_be_visible(timeout=timeout)
 
     def assert_text_present_on_page(self, text):
         expect(self.page.locator('body')).to_contain_text(text)
