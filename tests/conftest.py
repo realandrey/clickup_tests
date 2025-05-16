@@ -18,3 +18,4 @@ def create_and_delete_task():
     if task_id:
         delete_url = f"{BASE_URL}/task/{task_id}"
         requests.delete(delete_url, headers=HEADERS)
+

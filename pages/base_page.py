@@ -45,4 +45,8 @@ class BasePage:
     def wait_for_selector(self,selector):
         expect(self.page.locator(selector)).to_be_visible(timeout=10000)
 
+    def wait_for_selector_and_hover(self, selector):
+        self.page.wait_for_selector(selector)
+        self.page.hover(selector)
+
 
