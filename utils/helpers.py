@@ -13,3 +13,4 @@ def get_env_variable(name):
 CLICKUP_API_KEY = get_env_variable("CLICKUP_API_KEY")
 CLICKUP_EMAIL = get_env_variable("CLICKUP_EMAIL")
 CLICKUP_PASSWORD= get_env_variable("CLICKUP_PASSWORD")
+CLICKUP_API = get_env_variable("CLICKUP_API")

@@ -1,3 +1,4 @@
+import json
 import os
 
 from pages.base_page import BasePage
@@ -24,11 +25,34 @@ class BoardPage(BasePage):
         self.page.wait_for_load_state("load")
         expect(self.page).to_have_url(f"https://app.clickup.com/{self._endpoint}")
         self.wait_for_selector_and_click(self.BOARD_BUTTON)
-        viewport = self.page.locator(self.VIRTUAL_SCROLL)
+        viewport = self.page.locator(self.VIRTUAL_SCROLL).nth(1)
         if viewport.is_visible():
-            viewport.scroll_to(0, 1000)
+            self.page.eval_on_selector(self.VIRTUAL_SCROLL, 'el => el.scrollTo(0, 1000)')
 
     def wait_for_task_visible(self, task_name: str, timeout: int = 15000):
         self.page.wait_for_selector(f"text={json.dumps(task_name)}", state="visible", timeout=timeout)
 
-# навести курсор на карточку через ховер(добавить в бейз пейдж) затем нажаить на кебаб и удалить.
+    def is_task_visible(self, task_name: str) -> bool:
+        selector = self.TASK_LINK_TEMPLATE.format(name=json.dumps(task_name))
+        return self.page.locator(selector).is_visible()
+
+    def create_task_ui(self, task_name: str):
+        self.wait_for_selector_and_click(self.CREATE_BUTTON)
+        self.wait_for_selector_and_type(self.TASK_INPUT, task_name, delay=100)
+        self.wait_for_selector_and_click(self.SAVE_BUTTON)
+        self.page.wait_for_selector(self.TASK_LINK_TEMPLATE.format(name=task_name))
+
+    def delete_task(self, task_name: str):
+        task_selector = self.TASK_LINK_TEMPLATE.format(name=task_name)
+        ellipsis_selector = self.ELLIPSIS_MENU_TEMPLATE.format(name=task_name)
+
+
+        self.page.locator(task_selector).hover()
+
+        self.wait_for_selector_and_click(ellipsis_selector)
+
+        self.wait_for_selector_and_click(self.DELETE_MENU_ITEM)
+
+        self.page.wait_for_selector(task_selector, state="detached", timeout=10000)
+
+
