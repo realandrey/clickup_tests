@@ -1,26 +1,33 @@
 import requests
 import pytest
+import allure
 
 from api_clients.task_api import TaskAPI
 from constants import BASE_URL, HEADERS, LIST_ID
 from utils.helpers import CLICKUP_API, CLICKUP_API_KEY
 
 
+@allure.step("Создание и удаление задачи через API")
 @pytest.fixture(scope="session")
 def create_and_delete_task():
-    create_url = f"{BASE_URL}/list/{LIST_ID}/task"
-    payload = {
-        "name" : "Autotest task"
-    }
-    response = requests.post(create_url, headers=HEADERS, json=payload)
-    response.raise_for_status()
-    task_id = response.json().get("id")
+    with allure.step("Создание задачи для теста"):
+        create_url = f"{BASE_URL}/list/{LIST_ID}/task"
+        payload = {
+            "name" : "Autotest task"
+        }
+        response = requests.post(create_url, headers=HEADERS, json=payload)
+        response.raise_for_status()
+        task_id = response.json().get("id")
 
     yield task_id # Передаёт ID задачи в сам тест
 
-    if task_id:
-        delete_url = f"{BASE_URL}/task/{task_id}"
-        requests.delete(delete_url, headers=HEADERS)
+    with allure.step("Удаление созданной задачи после теста"):
+        if task_id:
+            delete_url = f"{BASE_URL}/task/{task_id}"
+            delete_response = requests.delete(delete_url, headers=HEADERS)
+            if delete_response.status_code not in (204, 404):
+                allure.attach(str(delete_response.text), name="Ошибка удаления",
+                              attachment_type=allure.attachment_type.TEXT)
 
 @pytest.fixture(scope="session")
 def task_api():
