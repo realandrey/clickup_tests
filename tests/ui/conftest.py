@@ -18,7 +18,7 @@ def browser() -> Browser:
             playwright.stop()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def login(browser: Browser) -> Page:
     with allure.step("Создание контекста браузера и новой страницы"):
         context = browser.new_context()
@@ -27,4 +27,7 @@ def login(browser: Browser) -> Page:
         LoginPage(page).login(CLICKUP_EMAIL, CLICKUP_PASSWORD)
     yield page
     with allure.step("Закрытие контекста после завершения сессии"):
+        page.close()
         context.close()
+
+
