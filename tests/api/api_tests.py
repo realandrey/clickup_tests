@@ -1,23 +1,32 @@
 import requests
 import pytest
+import allure
 
 from tests.conftest import create_and_delete_task
 from constants import BASE_URL, HEADERS, LIST_ID
 
+
+
+@allure.feature("Создание задач")
+@allure.description("Создание задачи и её удаление")
 def test_create_task():
-    url = f"{BASE_URL}/list/{LIST_ID}/task"
-    payload = {
-        "name": "Test task"
-    }
+    with allure.step("Подготовка данных"):
+        url = f"{BASE_URL}/list/{LIST_ID}/task"
+        payload = {
+            "name": "Test task"
+        }
 
-    response = requests.post(url, headers=HEADERS, json=payload)
+    with allure.step("Test body: Отправка запроса на создание задачи"):
+        response = requests.post(url, headers=HEADERS, json=payload)
+        assert response.status_code == 200, f"Ожидал 200 статус код, получил {response.status_code}"
+        task_id = response.json()["id"]
+        assert "id" in response.json()
+        assert response.json()["name"] == "Test task"
+        allure.attach(str(task_id), name="Created Task ID", attachment_type=allure.attachment_type.TEXT)
 
-    assert response.status_code == 200, f"Ожидал 200 статус код, получил {response.status_code}"
-    assert "id" in response.json()
-    assert response.json()["name"] == "Test task"
-
-    task_id = response.json()["id"]
-    requests.delete(f"{BASE_URL}/task/{task_id}", headers=HEADERS)
+    with allure.step("Tear down: Удаление задачи"):
+        delete_response = requests.delete(f"{BASE_URL}/task/{task_id}", headers=HEADERS)
+        assert delete_response.status_code == 204, "Удаление задачи завершилось с ошибкой"
 
 
 def test_get_task(create_and_delete_task):
