@@ -129,7 +129,7 @@ def test_delete_task_negative():
     fake_task_id = "sdfxx53453423774"
     url = f"{BASE_URL}/task/{fake_task_id}"
 
-    with allure.step(f"Test body: Попытка удаления фейковой задачи ID {fake_task_id}"):
+    with allure.step(f"Попытка удаления фейковой задачи ID {fake_task_id}"):
         response = requests.put(url, headers=HEADERS)
 
         assert response.status_code == 401, f"Ожидал 401 статус код, получил {response.status_code}"
