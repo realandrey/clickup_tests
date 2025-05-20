@@ -1,3 +1,5 @@
+import allure
+
 from pages.base_page import BasePage
 
 
@@ -14,6 +16,7 @@ class LoginPage(BasePage):
     ERROR_SELECTOR = '[data-test="form__error"]'
 
 
+    @allure.step("Вход в систему с пользователем: {username}")
     def login(self, username, password):
         self.navigate_to()
         self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
@@ -23,6 +26,7 @@ class LoginPage(BasePage):
         self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
 
 
+    @allure.step("Проверка входа с неверным паролем для пользователя: {username}")
     def login_with_invalid_password(self, username, password):
         self.navigate_to()
         self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
