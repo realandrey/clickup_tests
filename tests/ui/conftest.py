@@ -7,15 +7,14 @@ from playwright.sync_api import sync_playwright, Browser, Page
 from pages.login_page import LoginPage
 from utils.helpers import CLICKUP_EMAIL, CLICKUP_PASSWORD
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def browser() -> Browser:
     with allure.step("Запуск Playwright и инициализация браузера Chromium"):
-        playwright = sync_playwright().start()
-        browser = playwright.chromium.launch(headless=False, slow_mo=1000)
-        yield browser
-        with allure.step("Закрытие браузера и остановка Playwright"):
-            browser.close()
-            playwright.stop()
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch(headless=False, slow_mo=1000)
+            yield browser
+            with allure.step("Закрытие браузера"):
+                browser.close()
 
 
 @pytest.fixture(scope="function")
