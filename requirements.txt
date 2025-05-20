@@ -1,0 +1,6 @@
+allure-python-commons~=2.14.2
+playwright~=1.52.0
+constants~=0.6.0
+pytest~=8.3.5
+requests~=2.32.3
+python-dotenv~=1.1.0
