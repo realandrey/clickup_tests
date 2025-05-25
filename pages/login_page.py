@@ -12,33 +12,21 @@ class LoginPage(BasePage):
     USERNAME_SELECTOR = '[id="login-email-input"]'
     PASSWORD_SELECTOR = '[id="login-password-input"]'
     LOGIN_BUTTON_SELECTOR = '[data-test="login-submit"]'
-    PASSWORD_INVALID_SELECTOR = '[id="login-password-input"]'
     ERROR_SELECTOR = '[data-test="form__error"]'
 
-
     @allure.step("Вход в систему с пользователем: {username}")
-    def login(self, username, password):
+    def login(self, username, password, expect_error: bool = False):
         self.navigate_to()
-        with allure.step("Вводим логин"):
+
+        with allure.step("Вводим логин и пароль"):
             self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
             self.wait_for_selector_and_type(self.PASSWORD_SELECTOR, password, 100)
-        with allure.step("Вводим пароль"):
             self.assert_input_value(self.USERNAME_SELECTOR, username)
             self.assert_input_value(self.PASSWORD_SELECTOR, password)
+
         with allure.step("Нажимаем кнопку 'Войти'"):
             self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
 
-
-    @allure.step("Проверка входа с неверным паролем для пользователя: {username}")
-    def login_with_invalid_password(self, username, password):
-        self.navigate_to()
-        with allure.step("Вводим логин"):
-            self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
-            self.wait_for_selector_and_type(self.PASSWORD_INVALID_SELECTOR, password, 100)
-        with allure.step("Вводим неверный пароль"):
-            self.assert_input_value(self.USERNAME_SELECTOR, username)
-            self.assert_input_value(self.PASSWORD_INVALID_SELECTOR, password)
-        with allure.step("Нажимаем кнопку 'Войти'"):
-            self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
-        with allure.step("Ожидаем появления сообщения об ошибке"):
-            self.wait_for_selector(self.ERROR_SELECTOR)
+        if expect_error:
+            with allure.step("Ожидаем появление ошибки"):
+                self.wait_for_selector(self.ERROR_SELECTOR)

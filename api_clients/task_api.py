@@ -50,3 +50,7 @@ class TaskAPI:
     @allure.step("Удалить задачу с ID {task_id}")
     def delete_task(self, task_id):
         return self.session.delete(f"{self.base_url}/task/{task_id}")
+
+    @allure.step("Получение задач из списка по ID: {list_id}")
+    def get_tasks_from_list(self, list_id):
+        return self.session.get(f"{self.base_url}/list/{list_id}/task")

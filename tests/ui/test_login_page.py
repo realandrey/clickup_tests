@@ -14,7 +14,7 @@ class TestLoginPage:
     @allure.description("Проверка успешного входа на страницу с валидными данными")
     def test_login_success(self, login):
         with allure.step("Ожидание появления текста 'Automate' на странице"):
-            login.wait_for_selector("text=Automate")  # дождаться элемента
+            login.wait_for_selector("text=Automate")
         with allure.step("Проверка, что на странице есть текст 'Automate'"):
             assert "Automate" in login.content()
 
@@ -24,12 +24,11 @@ class TestLoginPage:
         login_page = LoginPage(page)
 
         with allure.step(f"Попытка войти с неправильным паролем для {CLICKUP_EMAIL}"):
-            login_page.login_with_invalid_password(CLICKUP_EMAIL, 'this_pass_is_wrong_123!')
+            login_page.login(CLICKUP_EMAIL, 'this_pass_is_wrong_123!', expect_error=True)
 
         with allure.step("Проверка, что появилась ошибка 'Incorrect password for this email.'"):
             error_locator = page.locator('[data-test="form__error"]')
             expect(error_locator).to_be_visible(timeout=15000)
-
             assert 'Incorrect password for this email.' in error_locator.inner_text()
 
         with allure.step("Проверка, что текст 'Automate' на странице отсутствует"):

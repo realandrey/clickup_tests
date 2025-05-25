@@ -17,7 +17,7 @@ def create_and_delete_task(get_list_fixture, task_api):
         task_id = response.json().get("id")
 
 
-    yield task_id # Передаёт ID задачи в сам тест
+    yield task_id
 
     with allure.step("Удаление созданной задачи после теста через API"):
         if task_id:

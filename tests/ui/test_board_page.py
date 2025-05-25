@@ -66,7 +66,7 @@ class TestBoardPage:
             assert board_page.page.locator(task_link_selector).is_visible(), "Созданная задача не отображается через UI"
 
         list_id = get_list_fixture['id']
-        response = task_api.session.get(f"{task_api.base_url}/list/{list_id}/task")
+        response = task_api.get_tasks_from_list(list_id)
         assert response.status_code == 200, f"GET /list/{list_id}/task вернул {response.status_code}"
         tasks = response.json().get('tasks', [])
 
