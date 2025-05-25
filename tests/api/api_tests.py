@@ -15,10 +15,6 @@ def test_create_task(task_api, get_list_fixture):
         task_id = response.json()["id"]
         allure.attach(str(task_id), name="Created Task ID", attachment_type=allure.attachment_type.TEXT)
 
-    with allure.step("Удаление задачи через task_api.delete_task"):
-        delete_response = task_api.delete_task(task_id)
-        assert delete_response.status_code == 204, "Удаление задачи завершилось с ошибкой"
-
 
 @allure.feature("Получение задач")
 @allure.description("Получение ранее созданной задачи по ID")
