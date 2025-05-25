@@ -3,14 +3,15 @@ import pytest
 import allure
 
 from api_clients.task_api import TaskAPI
-from constants import BASE_URL, HEADERS, LIST_ID
+from constants import BASE_URL, HEADERS
 from utils.helpers import CLICKUP_API, CLICKUP_API_KEY
 
 
-@pytest.fixture(scope="session")
-def create_and_delete_task():
+@pytest.fixture(scope="function")
+def create_and_delete_task(get_list_fixture):
     with allure.step("Создание задачи через прямой API-запрос"):
-        create_url = f"{BASE_URL}/list/{LIST_ID}/task"
+        list_id = get_list_fixture["id"]
+        create_url = f"{BASE_URL}/list/{list_id}/task"
         payload = {
             "name" : "Autotest task"
         }

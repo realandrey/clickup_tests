@@ -19,19 +19,26 @@ class LoginPage(BasePage):
     @allure.step("Вход в систему с пользователем: {username}")
     def login(self, username, password):
         self.navigate_to()
-        self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
-        self.wait_for_selector_and_type(self.PASSWORD_SELECTOR, password, 100)
-        self.assert_input_value(self.USERNAME_SELECTOR, username)
-        self.assert_input_value(self.PASSWORD_SELECTOR, password)
-        self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
+        with allure.step("Вводим логин"):
+            self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
+            self.wait_for_selector_and_type(self.PASSWORD_SELECTOR, password, 100)
+        with allure.step("Вводим пароль"):
+            self.assert_input_value(self.USERNAME_SELECTOR, username)
+            self.assert_input_value(self.PASSWORD_SELECTOR, password)
+        with allure.step("Нажимаем кнопку 'Войти'"):
+            self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
 
 
     @allure.step("Проверка входа с неверным паролем для пользователя: {username}")
     def login_with_invalid_password(self, username, password):
         self.navigate_to()
-        self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
-        self.wait_for_selector_and_type(self.PASSWORD_INVALID_SELECTOR, password, 100)
-        self.assert_input_value(self.USERNAME_SELECTOR, username)
-        self.assert_input_value(self.PASSWORD_INVALID_SELECTOR, password)
-        self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
-        self.wait_for_selector(self.ERROR_SELECTOR)
+        with allure.step("Вводим логин"):
+            self.wait_for_selector_and_type(self.USERNAME_SELECTOR, username, 100)
+            self.wait_for_selector_and_type(self.PASSWORD_INVALID_SELECTOR, password, 100)
+        with allure.step("Вводим неверный пароль"):
+            self.assert_input_value(self.USERNAME_SELECTOR, username)
+            self.assert_input_value(self.PASSWORD_INVALID_SELECTOR, password)
+        with allure.step("Нажимаем кнопку 'Войти'"):
+            self.wait_for_selector_and_click(self.LOGIN_BUTTON_SELECTOR)
+        with allure.step("Ожидаем появления сообщения об ошибке"):
+            self.wait_for_selector(self.ERROR_SELECTOR)

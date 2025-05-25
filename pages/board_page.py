@@ -3,13 +3,14 @@ import os
 import allure
 
 from pages.base_page import BasePage
-from constants import TEAM_ID
 from playwright.sync_api import expect
 
 
 class BoardPage(BasePage):
-    TEAM_ID = os.getenv("CLICKUP_TEAM_ID", "90131041433")
-    _endpoint = f"{TEAM_ID}/v/b/t/{TEAM_ID}"
+
+    def __init__(self, page, team_id):
+        super().__init__(page)
+        self._endpoint = f"{team_id}/v/b/t/{team_id}"
 
     BOARD_BUTTON = '[data-test="data-view-item__Board"]'
     BOARD_HEADER = "[data-test='board-header']"
@@ -46,10 +47,14 @@ class BoardPage(BasePage):
 
     @allure.step("Создаём задачу с именем: {task_name}")
     def create_task_ui(self, task_name: str):
-        self.wait_for_selector_and_click(self.CREATE_BUTTON)
-        self.wait_for_selector_and_type(self.TASK_INPUT, task_name, delay=100)
-        self.wait_for_selector_and_click(self.SAVE_BUTTON)
-        self.page.wait_for_selector(self.TASK_LINK_TEMPLATE.format(name=task_name))
+        with allure.step("Нажимаем кнопку создания задачи"):
+            self.wait_for_selector_and_click(self.CREATE_BUTTON)
+        with allure.step("Вводим имя задачи"):
+            self.wait_for_selector_and_type(self.TASK_INPUT, task_name, delay=100)
+        with allure.step("Сохраняем задачу"):
+            self.wait_for_selector_and_click(self.SAVE_BUTTON)
+        with allure.step("Ожидаем появления задачи в списке"):
+            self.page.wait_for_selector(self.TASK_LINK_TEMPLATE.format(name=task_name))
 
 
     @allure.step("Удаляем задачу с именем: {task_name}")
@@ -57,10 +62,13 @@ class BoardPage(BasePage):
         task_selector = self.TASK_LINK_TEMPLATE.format(name=task_name)
         ellipsis_selector = self.ELLIPSIS_MENU_TEMPLATE.format(name=task_name)
 
-
-        self.page.locator(task_selector).hover()
-        self.wait_for_selector_and_click(ellipsis_selector)
-        self.wait_for_selector_and_click(self.DELETE_MENU_ITEM)
-        self.page.wait_for_selector(task_selector, state="detached", timeout=10000)
+        with allure.step("Наводим курсор на задачу"):
+            self.page.locator(task_selector).hover()
+        with allure.step("Открываем контекстное меню задачи"):
+            self.wait_for_selector_and_click(ellipsis_selector)
+        with allure.step("Нажимаем пункт 'Delete'"):
+            self.wait_for_selector_and_click(self.DELETE_MENU_ITEM)
+        with allure.step("Ожидаем исчезновения задачи из DOM"):
+            self.page.wait_for_selector(task_selector, state="detached", timeout=10000)
 
 

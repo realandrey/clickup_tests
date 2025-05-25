@@ -18,10 +18,10 @@ class TestBoardPage:
         - Задача исчезла с доски
         - API возвращает 404 по её ID
         """)
-    def test_task_delete(self, login, create_task_fixture, task_api):
+    def test_task_delete(self, login, create_task_fixture, task_api, get_team_fixture):
         task_id = create_task_fixture['id']
         task_name = create_task_fixture['name']
-        board_page = BoardPage(login)
+        board_page = BoardPage(login, get_team_fixture["id"])
 
         with allure.step("Открываем доску"):
             board_page.open_board()
@@ -49,9 +49,9 @@ class TestBoardPage:
         - Проверка наличия через API
         - Удаление задачи через API
         """)
-    def test_create_task_ui(self, login, task_api, get_list_fixture):
+    def test_create_task_ui(self, login, task_api, get_list_fixture, get_team_fixture):
         name_for_test = f"Task for delete test {datetime.now().strftime('%H%M%S')}"
-        board_page = BoardPage(login)
+        board_page = BoardPage(login, get_team_fixture["id"])
 
         with allure.step("Открываем доску"):
             board_page.open_board()

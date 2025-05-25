@@ -2,16 +2,17 @@ import requests
 import pytest
 import allure
 
-from tests.conftest import create_and_delete_task
-from constants import BASE_URL, HEADERS, LIST_ID
+from tests.conftest import create_and_delete_task, get_list_fixture
+from constants import BASE_URL, HEADERS
 
 
 
 @allure.feature("Создание задач")
 @allure.description("Создание задачи и её удаление")
-def test_create_task():
+def test_create_task(get_list_fixture):
     with allure.step("Подготовка данных"):
-        url = f"{BASE_URL}/list/{LIST_ID}/task"
+        list_id = get_list_fixture("id")
+        url = f"{BASE_URL}/list/{list_id}/task"
         payload = {
             "name": "Test task"
         }
@@ -86,9 +87,10 @@ def test_delete_task(create_and_delete_task):
     ({"name": ""}, 400), # пустое имя
     ({"name": None}, 400) # name = None
 ])
-def test_create_task_negative(payload, expected_status):
+def test_create_task_negative(payload, expected_status, get_list_fixture):
     with allure.step("Попытка создания задачи с невалидным телом запроса"):
-        url = f"{BASE_URL}/list/{LIST_ID}/task"
+        list_id = get_list_fixture("id")
+        url = f"{BASE_URL}/list/{list_id}/task"
         response = requests.post(url, headers=HEADERS, json=payload)
 
         assert response.status_code == expected_status, f"Ожидал {expected_status}, получил {response.status_code}. Ответ: {response.text}"

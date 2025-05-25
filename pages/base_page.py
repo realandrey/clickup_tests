@@ -16,11 +16,10 @@ class BasePage:
     @allure.step("Навигация по странице")
     def navigate_to(self):
         full_url = self._get_full_url()
-        with allure.step(f"Навигация по урлу: {full_url}"):
-            self.page.goto(full_url)
-            self.page.wait_for_load_state('load')
-            expect (self.page).to_have_url(full_url)
-            expect(self.page).to_have_url(re.compile(f"{full_url}"))
+        self.page.goto(full_url)
+        self.page.wait_for_load_state('load')
+        expect (self.page).to_have_url(full_url)
+        expect(self.page).to_have_url(re.compile(f"{full_url}"))
 
     @allure.step("Клик по селектору: {selector}")
     def wait_for_selector_and_click(self, selector):
@@ -53,9 +52,11 @@ class BasePage:
     def assert_input_value(self, selector, expected_value):
         expect(self.page.locator(selector)).to_have_value(expected_value)
 
+    @allure.step("Ожидание появления селектора: {selector}")
     def wait_for_selector(self,selector):
         expect(self.page.locator(selector)).to_be_visible(timeout=10000)
 
+    @allure.step("Наведение курсора на элемент: {selector}")
     def wait_for_selector_and_hover(self, selector):
         self.page.wait_for_selector(selector)
         self.page.hover(selector)
