@@ -7,6 +7,7 @@ from constants import BASE_URL, HEADERS
 from utils.helpers import CLICKUP_API, CLICKUP_API_KEY
 
 
+
 @pytest.fixture(scope="function")
 def create_and_delete_task(get_list_fixture):
     with allure.step("Создание задачи через прямой API-запрос"):
@@ -32,6 +33,7 @@ def create_and_delete_task(get_list_fixture):
 
 @pytest.fixture(scope="session")
 def task_api():
+    print(">>> task_api FIXTURE LOADED")
     with allure.step("Инициализация TaskAPI и проверка подключения к API"):
         api = TaskAPI(CLICKUP_API, CLICKUP_API_KEY)
         response = api.get_team()

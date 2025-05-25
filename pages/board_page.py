@@ -1,5 +1,4 @@
 import json
-import os
 import allure
 
 from pages.base_page import BasePage
@@ -28,7 +27,6 @@ class BoardPage(BasePage):
         self.page.goto(f"https://app.clickup.com/{self._endpoint}")
         self.page.wait_for_load_state("load")
         expect(self.page).to_have_url(f"https://app.clickup.com/{self._endpoint}")
-        self.wait_for_selector_and_click(self.BOARD_BUTTON)
         viewport = self.page.locator(self.VIRTUAL_SCROLL).nth(1)
         if viewport.is_visible():
             self.page.eval_on_selector(self.VIRTUAL_SCROLL, 'el => el.scrollTo(0, 1000)')
@@ -62,12 +60,21 @@ class BoardPage(BasePage):
         task_selector = self.TASK_LINK_TEMPLATE.format(name=task_name)
         ellipsis_selector = self.ELLIPSIS_MENU_TEMPLATE.format(name=task_name)
 
+        task = self.page.locator(task_selector)
+
+        with allure.step("Прокручиваем к задаче"):
+            task.scroll_into_view_if_needed()
+            self.page.wait_for_timeout(300)
+
         with allure.step("Наводим курсор на задачу"):
-            self.page.locator(task_selector).hover()
+            task.hover()
+
         with allure.step("Открываем контекстное меню задачи"):
             self.wait_for_selector_and_click(ellipsis_selector)
+
         with allure.step("Нажимаем пункт 'Delete'"):
             self.wait_for_selector_and_click(self.DELETE_MENU_ITEM)
+
         with allure.step("Ожидаем исчезновения задачи из DOM"):
             self.page.wait_for_selector(task_selector, state="detached", timeout=10000)
 

@@ -11,7 +11,7 @@ from constants import BASE_URL, HEADERS
 @allure.description("Создание задачи и её удаление")
 def test_create_task(get_list_fixture):
     with allure.step("Подготовка данных"):
-        list_id = get_list_fixture("id")
+        list_id = get_list_fixture["id"]
         url = f"{BASE_URL}/list/{list_id}/task"
         payload = {
             "name": "Test task"
@@ -89,7 +89,7 @@ def test_delete_task(create_and_delete_task):
 ])
 def test_create_task_negative(payload, expected_status, get_list_fixture):
     with allure.step("Попытка создания задачи с невалидным телом запроса"):
-        list_id = get_list_fixture("id")
+        list_id = get_list_fixture["id"]
         url = f"{BASE_URL}/list/{list_id}/task"
         response = requests.post(url, headers=HEADERS, json=payload)
 
