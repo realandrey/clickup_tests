@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright, Browser, Page
 from pages.login_page import LoginPage
 from utils.helpers import CLICKUP_EMAIL, CLICKUP_PASSWORD
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def browser() -> Browser:
     with allure.step("Запуск Playwright и инициализация браузера Chromium"):
         with sync_playwright() as playwright:
@@ -17,7 +17,7 @@ def browser() -> Browser:
                 browser.close()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def login(browser: Browser) -> Page:
     with allure.step("Создание контекста браузера и новой страницы"):
         context = browser.new_context()

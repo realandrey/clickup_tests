@@ -8,24 +8,20 @@ from utils.helpers import CLICKUP_API, CLICKUP_API_KEY
 
 
 
-@pytest.fixture(scope="function")
-def create_and_delete_task(get_list_fixture):
-    with allure.step("Создание задачи через прямой API-запрос"):
-        list_id = get_list_fixture["id"]
-        create_url = f"{BASE_URL}/list/{list_id}/task"
-        payload = {
-            "name" : "Autotest task"
-        }
-        response = requests.post(create_url, headers=HEADERS, json=payload)
-        response.raise_for_status()
+@pytest.fixture
+def create_and_delete_task(get_list_fixture, task_api):
+    with allure.step("Создание задачи через TaskAPI"):
+        task_data = {"name": "Autotest task"}
+        response = task_api.create_task(get_list_fixture["id"], task_data)
+        assert response.status_code == 200
         task_id = response.json().get("id")
+
 
     yield task_id # Передаёт ID задачи в сам тест
 
     with allure.step("Удаление созданной задачи после теста через API"):
         if task_id:
-            delete_url = f"{BASE_URL}/task/{task_id}"
-            delete_response = requests.delete(delete_url, headers=HEADERS)
+            delete_response = task_api.delete_task(task_id)
             if delete_response.status_code not in (204, 404):
                 allure.attach(str(delete_response.text), name="Ошибка удаления",
                               attachment_type=allure.attachment_type.TEXT)
@@ -33,7 +29,6 @@ def create_and_delete_task(get_list_fixture):
 
 @pytest.fixture(scope="session")
 def task_api():
-    print(">>> task_api FIXTURE LOADED")
     with allure.step("Инициализация TaskAPI и проверка подключения к API"):
         api = TaskAPI(CLICKUP_API, CLICKUP_API_KEY)
         response = api.get_team()
