@@ -73,9 +73,7 @@ def test_create_task_negative(task_api, get_list_fixture, payload, expected_stat
 
 @allure.feature("Негативные тесты получения задачи")
 @allure.description("Проверка получения задачи с некорректным ID")
-def test_get_task_negative(task_api):
-    fake_task_id = "34534534234"
-
+def test_get_task_negative(task_api, fake_task_id):
     with allure.step(f"Попытка получить фейковую задачу через task_api.get_task"):
         response = task_api.get_task(fake_task_id)
         assert response.status_code == 401, f"Ожидал 401, получил {response.status_code}"
@@ -84,10 +82,8 @@ def test_get_task_negative(task_api):
 
 @allure.feature("Негативные тесты обновления задачи")
 @allure.description("Проверка обновления задачи с несуществующим ID")
-def test_update_task_negative(task_api):
-    fake_task_id = "sdfasdf34534534234"
+def test_update_task_negative(task_api, fake_task_id):
     payload = {"name": "Negative name"}
-
     with allure.step("Попытка обновления фейковой задачи через task_api.update_task"):
         response = task_api.update_task(fake_task_id, payload)
         assert response.status_code == 401, f"Ожидал 401, получил {response.status_code}"
@@ -96,9 +92,7 @@ def test_update_task_negative(task_api):
 
 @allure.feature("Негативные тесты удаления задачи")
 @allure.description("Проверка удаления задачи с несуществующим ID")
-def test_delete_task_negative(task_api):
-    fake_task_id = "sdfxx53453423774"
-
+def test_delete_task_negative(task_api, fake_task_id):
     with allure.step("Попытка удаления фейковой задачи через task_api.delete_task"):
         response = task_api.delete_task(fake_task_id)
         assert response.status_code == 401, f"Ожидал 401, получил {response.status_code}"

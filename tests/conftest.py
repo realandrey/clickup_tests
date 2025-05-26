@@ -74,3 +74,7 @@ def create_task_fixture(task_api, get_list_fixture):
         assert delete_response.status_code == 204, (
             f"Ошибка удаления задачи: {delete_response.status_code} / {delete_response.text}"
         )
+
+@pytest.fixture
+def fake_task_id():
+    return "nonexistent_task_id_34534534234"
