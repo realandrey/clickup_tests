@@ -1,7 +1,7 @@
 import pytest
 import allure
 
-from tests.conftest import create_and_delete_task, get_list_fixture, task_api
+from tests.conftest import create_task_fixture, get_list_fixture, task_api
 
 
 @allure.feature("Создание задач")
@@ -18,8 +18,8 @@ def test_create_task(task_api, get_list_fixture):
 
 @allure.feature("Получение задач")
 @allure.description("Получение ранее созданной задачи по ID")
-def test_get_task(task_api, create_and_delete_task):
-    task_id = create_and_delete_task
+def test_get_task(task_api, create_task_fixture):
+    task_id = create_task_fixture["id"]
 
     with allure.step("Получение задачи через task_api.get_task"):
         response = task_api.get_task(task_id)
@@ -31,8 +31,8 @@ def test_get_task(task_api, create_and_delete_task):
 
 @allure.feature("Обновление задач")
 @allure.description("Обновление задачи по ID")
-def test_update_task(task_api, create_and_delete_task):
-    task_id = create_and_delete_task
+def test_update_task(task_api, create_task_fixture):
+    task_id = create_task_fixture["id"]
     payload = {"name": "Updated task from Postman"}
 
     with allure.step("Обновление задачи через task_api.update_task"):
@@ -43,8 +43,8 @@ def test_update_task(task_api, create_and_delete_task):
 
 @allure.feature("Удаление задач")
 @allure.description("Удаление задачи и проверка что она больше не существует")
-def test_delete_task(task_api, create_and_delete_task):
-    task_id = create_and_delete_task
+def test_delete_task(task_api, create_task_fixture):
+    task_id = create_task_fixture["id"]
 
     with allure.step("Удаление задачи через task_api.delete_task"):
         delete_response = task_api.delete_task(task_id)

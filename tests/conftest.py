@@ -8,25 +8,6 @@ from utils.helpers import CLICKUP_API, CLICKUP_API_KEY
 
 
 
-@pytest.fixture
-def create_and_delete_task(get_list_fixture, task_api):
-    with allure.step("Создание задачи через TaskAPI"):
-        task_data = {"name": "Autotest task"}
-        response = task_api.create_task(get_list_fixture["id"], task_data)
-        assert response.status_code == 200
-        task_id = response.json().get("id")
-
-
-    yield task_id
-
-    with allure.step("Удаление созданной задачи после теста через API"):
-        if task_id:
-            delete_response = task_api.delete_task(task_id)
-            if delete_response.status_code not in (204, 404):
-                if delete_response.status_code != 204:
-                    pytest.fail(f"Ошибка удаления: {delete_response.status_code} - {delete_response.text}")
-
-
 @pytest.fixture(scope="session")
 def task_api():
     with allure.step("Инициализация TaskAPI и проверка подключения к API"):
@@ -90,4 +71,6 @@ def create_task_fixture(task_api, get_list_fixture):
 
     with allure.step("Удаление задачи после теста"):
         delete_response = task_api.delete_task(task["id"])
-        assert delete_response.status_code in (204, 404), f"DELETE /task/{task['id']} вернул {delete_response.status_code}"
+        assert delete_response.status_code == 204, (
+            f"Ошибка удаления задачи: {delete_response.status_code} / {delete_response.text}"
+        )
