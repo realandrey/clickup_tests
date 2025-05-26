@@ -24,9 +24,10 @@ class BoardPage(BasePage):
 
     @allure.step("Открываем доску")
     def open_board(self):
-        self.page.goto(f"https://app.clickup.com/{self._endpoint}")
+        board_url = f"{self.base_url}/{self._endpoint}"
+        self.page.goto(board_url)
         self.page.wait_for_load_state("load")
-        expect(self.page).to_have_url(f"https://app.clickup.com/{self._endpoint}")
+        expect(self.page).to_have_url(board_url)
         viewport = self.page.locator(self.VIRTUAL_SCROLL).nth(1)
         if viewport.is_visible():
             self.page.eval_on_selector(self.VIRTUAL_SCROLL, 'el => el.scrollTo(0, 1000)')
