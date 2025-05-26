@@ -6,14 +6,13 @@ from tests.conftest import create_task_fixture, get_list_fixture, task_api
 
 @allure.feature("Создание задач")
 @allure.description("Создание задачи и её удаление")
-def test_create_task(task_api, get_list_fixture):
-    with allure.step("Создание задачи через task_api.create_task"):
-        list_id = get_list_fixture["id"]
-        payload = {"name": "Test task"}
-        response = task_api.create_task(list_id, payload)
-        assert response.status_code == 200, f"Ожидал 200, получил {response.status_code}"
-        task_id = response.json()["id"]
+def test_create_task(create_task_fixture):
+    task_id = create_task_fixture["id"]
+
+    with allure.step("Проверка, что задача была успешно создана"):
+        assert task_id, "ID задачи пустой"
         allure.attach(str(task_id), name="Created Task ID", attachment_type=allure.attachment_type.TEXT)
+
 
 
 @allure.feature("Получение задач")
