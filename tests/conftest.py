@@ -23,8 +23,8 @@ def create_and_delete_task(get_list_fixture, task_api):
         if task_id:
             delete_response = task_api.delete_task(task_id)
             if delete_response.status_code not in (204, 404):
-                allure.attach(str(delete_response.text), name="Ошибка удаления",
-                              attachment_type=allure.attachment_type.TEXT)
+                if delete_response.status_code != 204:
+                    pytest.fail(f"Ошибка удаления: {delete_response.status_code} - {delete_response.text}")
 
 
 @pytest.fixture(scope="session")
