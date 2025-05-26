@@ -33,12 +33,13 @@ def test_get_task(task_api, create_task_fixture):
 @allure.description("Обновление задачи по ID")
 def test_update_task(task_api, create_task_fixture):
     task_id = create_task_fixture["id"]
-    payload = {"name": "Updated task from Postman"}
+    updated_name = "Updated task from Postman"
+    payload = {"name": updated_name}
 
     with allure.step("Обновление задачи через task_api.update_task"):
         response = task_api.update_task(task_id, payload)
         assert response.status_code == 200, f"Ожидал 200, получил {response.status_code}"
-        assert response.json()["name"] == "Updated task from Postman"
+        assert response.json()["name"] == updated_name
 
 
 @allure.feature("Удаление задач")
