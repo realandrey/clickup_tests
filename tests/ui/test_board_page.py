@@ -4,7 +4,6 @@ import pytest
 import allure
 
 from pages.board_page import BoardPage
-from tests.conftest import create_task_fixture, task_api, get_list_fixture, get_folder_fixture, get_space_fixture, get_team_fixture
 
 
 @allure.suite("UI: Board")
