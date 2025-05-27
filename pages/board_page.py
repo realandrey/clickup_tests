@@ -1,8 +1,9 @@
 import json
+
 import allure
+from playwright.sync_api import expect
 
 from pages.base_page import BasePage
-from playwright.sync_api import expect
 
 
 class BoardPage(BasePage):
@@ -17,10 +18,9 @@ class BoardPage(BasePage):
     TASK_INPUT = '[data-test="quick-create-task-panel__panel-board__input"]'
     SAVE_BUTTON = '[data-test="quick-create-task-panel__panel-board__enter-button"]'
     DELETE_MENU_ITEM = ".nav-menu-item__name >> text='Delete'"
-    VIRTUAL_SCROLL = 'cdk-virtual-scroll-viewport'
+    VIRTUAL_SCROLL = "cdk-virtual-scroll-viewport"
     TASK_LINK_TEMPLATE = '[data-test="board-task__name-link__{name}"]'
     ELLIPSIS_MENU_TEMPLATE = '[data-test="board-actions-menu__ellipsis__{name}"]'
-
 
     @allure.step("Открываем доску")
     def open_board(self):
@@ -30,19 +30,20 @@ class BoardPage(BasePage):
         expect(self.page).to_have_url(board_url)
         viewport = self.page.locator(self.VIRTUAL_SCROLL).nth(1)
         if viewport.is_visible():
-            self.page.eval_on_selector(self.VIRTUAL_SCROLL, 'el => el.scrollTo(0, 1000)')
-
+            self.page.eval_on_selector(
+                self.VIRTUAL_SCROLL, "el => el.scrollTo(0, 1000)"
+            )
 
     @allure.step("Ожидаем появления задачи с именем: {task_name}")
     def wait_for_task_visible(self, task_name: str, timeout: int = 15000):
-        self.page.wait_for_selector(f"text={json.dumps(task_name)}", state="visible", timeout=timeout)
-
+        self.page.wait_for_selector(
+            f"text={json.dumps(task_name)}", state="visible", timeout=timeout
+        )
 
     @allure.step("Проверяем, видна ли задача с именем: {task_name}")
     def is_task_visible(self, task_name: str) -> bool:
         selector = self.TASK_LINK_TEMPLATE.format(name=json.dumps(task_name))
         return self.page.locator(selector).is_visible()
-
 
     @allure.step("Создаём задачу с именем: {task_name}")
     def create_task_ui(self, task_name: str):
@@ -54,7 +55,6 @@ class BoardPage(BasePage):
             self.wait_for_selector_and_click(self.SAVE_BUTTON)
         with allure.step("Ожидаем появления задачи в списке"):
             self.page.wait_for_selector(self.TASK_LINK_TEMPLATE.format(name=task_name))
-
 
     @allure.step("Удаляем задачу с именем: {task_name}")
     def delete_task(self, task_name: str):
@@ -78,5 +78,3 @@ class BoardPage(BasePage):
 
         with allure.step("Ожидаем исчезновения задачи из DOM"):
             self.page.wait_for_selector(task_selector, state="detached", timeout=10000)
-
-

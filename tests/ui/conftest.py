@@ -1,11 +1,10 @@
-import pytest
 import allure
-
-from playwright.sync_api import sync_playwright, Browser, Page
-
+import pytest
+from playwright.sync_api import Browser, Page, sync_playwright
 
 from pages.login_page import LoginPage
 from utils.helpers import CLICKUP_EMAIL, CLICKUP_PASSWORD
+
 
 @pytest.fixture
 def browser() -> Browser:
@@ -28,5 +27,3 @@ def login(browser: Browser) -> Page:
     with allure.step("Закрытие контекста после завершения сессии"):
         page.close()
         context.close()
-
-

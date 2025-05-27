@@ -6,7 +6,7 @@ from pages.base_page import BasePage
 class LoginPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
-        self._endpoint = 'login'
+        self._endpoint = "login"
         self.page.set_default_timeout(60000)
 
     USERNAME_SELECTOR = '[id="login-email-input"]'
