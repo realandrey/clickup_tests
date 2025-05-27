@@ -67,18 +67,15 @@ def create_task_fixture(task_api, get_list_fixture):
     with allure.step("Создание задачи в списке"):
         task_data = {"name": "Test Task", "description": "Test"}
         response = task_api.create_task(get_list_fixture["id"], task_data)
-        result = {
-            "status_code": response.status_code,
-            "data": response.json()
-        }
+        result = {"status_code": response.status_code, "data": response.json()}
 
         yield result
 
         with allure.step("Удаление задачи после теста"):
             delete_response = task_api.delete_task(result["data"]["id"])
-            assert delete_response.status_code == 204, (
-                f"Ошибка удаления задачи: {delete_response.status_code} / {delete_response.text}"
-            )
+            assert (
+                delete_response.status_code == 204
+            ), f"Ошибка удаления задачи: {delete_response.status_code} / {delete_response.text}"
 
 
 @pytest.fixture

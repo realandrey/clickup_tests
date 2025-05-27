@@ -19,8 +19,8 @@ class TestBoardPage:
         """
     )
     def test_task_delete(self, login, create_task_fixture, task_api, get_team_fixture):
-        task_id = create_task_fixture["id"]
-        task_name = create_task_fixture["name"]
+        task_id = create_task_fixture["data"]["id"]
+        task_name = create_task_fixture["data"]["name"]
         board_page = BoardPage(login, get_team_fixture["id"])
 
         with allure.step("Открываем доску"):

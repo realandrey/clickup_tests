@@ -27,27 +27,10 @@ class BasePage:
         self.page.wait_for_selector(selector)
         self.page.click(selector)
 
-    @allure.step("Заполнение поля: {selector} значением: {value}")
-    def wait_for_selector_and_fill(self, selector, value):
-        self.page.wait_for_selector(selector)
-        self.page.fill(selector, value)
-
     @allure.step("Ввод текста с задержкой в {selector}")
     def wait_for_selector_and_type(self, selector, value, delay):
         self.page.wait_for_selector(selector)
         self.page.type(selector, value, delay=delay)
-
-    @allure.step("Проверка, что элемент {selector} видим")
-    def assert_element_is_visible(self, selector, timeout=60000):
-        expect(self.page.locator(selector)).to_be_visible(timeout=timeout)
-
-    @allure.step("Проверка наличия текста '{text}' на странице")
-    def assert_text_present_on_page(self, text):
-        expect(self.page.locator("body")).to_contain_text(text)
-
-    @allure.step("Проверка, что значение поля {selector} заполнено текстом {text}")
-    def assert_text_in_element(self, selector, text):
-        expect(self.page.locator(selector)).to_have_text(text)
 
     @allure.step("Проверка, что значение поля {selector} равно {expected_value}")
     def assert_input_value(self, selector, expected_value):
@@ -56,8 +39,3 @@ class BasePage:
     @allure.step("Ожидание появления селектора: {selector}")
     def wait_for_selector(self, selector):
         expect(self.page.locator(selector)).to_be_visible(timeout=10000)
-
-    @allure.step("Наведение курсора на элемент: {selector}")
-    def wait_for_selector_and_hover(self, selector):
-        self.page.wait_for_selector(selector)
-        self.page.hover(selector)
